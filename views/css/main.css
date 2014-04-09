@@ -1,0 +1,55 @@
+html
+{
+	background: #45484d;
+	background: -moz-radial-gradient(center, ellipse cover,  #45484d 0%, #000000 100%);
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#45484d), color-stop(100%,#000000));
+	background: -webkit-radial-gradient(center, ellipse cover,  #45484d 0%,#000000 100%);
+	background: -o-radial-gradient(center, ellipse cover,  #45484d 0%,#000000 100%);
+	background: -ms-radial-gradient(center, ellipse cover,  #45484d 0%,#000000 100%);
+	background: radial-gradient(ellipse at center,  #45484d 0%,#000000 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=1 );
+
+	min-height: 100%;
+}
+pre
+{
+	display: block;
+	padding: 9.5px;
+	margin: 0px 0px 10px;
+	font-size: 13px;
+	line-height: 20px;
+	word-break: break-all;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	background-color: #F5F5F5;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+}
+#page
+{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background: white;
+	border: 1px solid #232323;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0px 0px 20px 5px;
+}
+#box_message
+{
+	width: 98%;
+	resize: none;
+}
+#chatlog
+{
+	text-align: left;
+	margin: 0px 0px 25px;
+	padding: 10px;
+	background: none repeat scroll 0% 0% #FFF;
+	height: 370px;
+	width: 97%;
+	border: 1px solid #DCDCDC;
+	border-radius: 10px;
+	overflow: auto;
+	box-shadow: 0px 0px 4px 0px #BBB inset;
+}
