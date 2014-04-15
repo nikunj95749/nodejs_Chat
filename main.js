@@ -6,6 +6,7 @@ Chat application for @node.js
 var http = require('http'),
 	fs = require('fs'),
 	io = require('socket.io'),
+	escape_html = require('escape-html'),
 	resolve_request = require('./bin/ResolveRequest');
 
 console.log('Loading configuration.');
@@ -36,13 +37,22 @@ io.sockets.on('connection', function(socket)
 	//Send message whenever the server gets data
 	socket.on('message_to_server', function(data)
 	{
-		io.sockets.emit('message_to_client', {message: data['message']});
+		//Escape html tags.
+		var msg = escape_html(data['message']);
+
+		io.sockets.emit('message_to_client',
+		{
+			message: msg
+		});
 	});
 
 	//Send disconnection message whenever someone gets out.
 	socket.on('disconnect', function()
 	{
-		io.sockets.emit('message_to_client', {message: 'user disconnected/timeout'});
+		io.sockets.emit('message_to_client',
+		{
+			message: 'user disconnected/timeout'
+		});
 	});
 });
 
