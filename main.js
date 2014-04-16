@@ -32,7 +32,7 @@ var io = io.listen(server);
 io.set('log', 0);
 
 //Initiates the socket
-io.sockets.on('connection', function(socket)
+var socket = io.sockets.on('connection', function(socket)
 {
 	//Send message whenever the server gets data
 	socket.on('message_to_server', function(data)
@@ -56,4 +56,32 @@ io.sockets.on('connection', function(socket)
 	});
 });
 
+socket;
+
 console.log('Server started.');
+
+//Restart server whenever there's a change in the file.
+fs.watchFile('main.js', function(current, previous)
+{
+	server.close();
+	server.listen(port);
+	console.log('Server listening to : ' + port);
+});
+
+
+//Restart server whenever there's a change in the config file.
+fs.watchFile('config.json', function(current, previous)
+{
+	server.close();
+
+	//Reload configuration file.
+	config = fs.readFileSync('config.json');
+	config = JSON.parse(config);
+	port = config.port;
+	dir = config.public_dir;
+
+	server.listen(port);
+	socket;
+	console.log('Server listening to : ' + port);
+
+});

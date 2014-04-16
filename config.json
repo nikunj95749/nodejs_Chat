@@ -1,4 +1,4 @@
 {
-	"port": "3141",
+	"port": "80",
 	"public_dir": "./views"
 }
