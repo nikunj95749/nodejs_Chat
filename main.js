@@ -20,42 +20,43 @@ console.log('Configuration loaded.');
 //Initiate express module in app.
 var app = express();
 
-// app.get('/', function(request, response)
-// {
-// 	fs.readFile('./views/index.html', function(error, data)
-// 	{
-// 		if(error)
-// 		{
-// 			response.send('View cannot be rendered.');
-// 		}
 
-// 		response.type('html');
-// 		response.send(data);
-// 	});
-// });
-
+//Global vars
 var test = "Hello";
+var Title = "Node.js Chat";
 
 app.engine('html', swig.renderFile);
 
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
 
-// app.set('view cache', false);
 swig.setDefaults(
 {
 	cache: false
 });
 
-app.get('/', function(request, response)
+//logger.
+app.use(function(request, response, next)
 {
-	response.render('index', 
+	console.log('%s %s', request.method, request.url);
+
+	var file = request.url.slice(1 + request.url.indexOf('/'));
+
+	app.get(request.url, function(request, response)
 	{
-		//Var to be named in the render : value;
-		'test': test
+		response.render(file,
+		{
+			//Var to be named in the render : value;
+			'test': test,
+			'Title': Title,
+		});
 	});
+
+	next();
 });
 
+//Set directory for static files (css, js, img)
+app.use(express.static(__dirname + '/public'));
 
 //Run the app.
 app.listen(port);
