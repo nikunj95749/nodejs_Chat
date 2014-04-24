@@ -6,6 +6,8 @@
 	"dependencies":
 	{
 		"express": "4.x",
-		"socket.io": "0.x"
+		"socket.io": "0.x",
+		"swig": "1.x",
+		"body-parser": "1.x"
 	}
 }

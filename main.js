@@ -5,7 +5,9 @@ express version.
 
 //Load modules.
 var express = require('express'),
+	http = require('http'),
 	socket = require('socket.io'),
+	bodyParser = require('body-parser'),
 	swig = require('swig'),
 	fs = require('fs');
 
@@ -20,19 +22,47 @@ console.log('Configuration loaded.');
 //Initiate express module in app.
 var app = express();
 
+app.use(bodyParser());
+
 
 //Global vars
-var test = "Hello";
 var Title = "Node.js Chat";
+var result = '';
+
 
 app.engine('html', swig.renderFile);
 
+//Set view engine.
 app.set('view engine', 'html');
+
+//Set the directory for views.
 app.set('views', __dirname + '/views');
 
 swig.setDefaults(
 {
 	cache: false
+});
+
+app.get('/', function(request, response)
+{
+	console.log('GET OK');
+	response.render('index',
+	{
+		'Title': Title,
+		'result': result,
+	});
+});
+
+app.post('/', function(request, response)
+{
+	console.log('POST OK');
+	console.log(request.body);
+
+	response.render('index',
+	{
+		'Title': Title,
+		'result': 'Post detected',
+	});
 });
 
 //logger.
@@ -47,16 +77,20 @@ app.use(function(request, response, next)
 		response.render(file,
 		{
 			//Var to be named in the render : value;
-			'test': test,
 			'Title': Title,
+			'result': result,
 		});
 	});
 
 	next();
 });
 
+
 //Set directory for static files (css, js, img)
 app.use(express.static(__dirname + '/public'));
 
 //Run the app.
-app.listen(port);
+http.createServer(app).listen(port, function()
+{
+	console.log('Server listening to ' + port);
+});
