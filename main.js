@@ -10,7 +10,8 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	bodyParser = require('body-parser'),
 	swig = require('swig'),
-	fs = require('fs');
+	fs = require('fs'),
+	database = require('./database');
 
 //Load config.
 console.log('Loading configuration.');
@@ -54,20 +55,9 @@ app.get('/', function(request, response)
 	});
 });
 
-//Create User schema.
-var userSchema = mongoose.Schema(
-{
-	username: String,
-	password: String
-});
-
-//User model.
-var UserModel = mongoose.model('User', userSchema);
-
 app.post('/', function(request, response)
 {
 	console.log('POST OK');
-	// console.log(request.body);
 	mongoose.connect('mongodb://localhost');
 
 	var db = mongoose.connection;
@@ -75,11 +65,33 @@ app.post('/', function(request, response)
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function callback()
 	{
-		console.log('connection succeed.');
-	});
+		database.findByName(request.body.username.toLowerCase(), function(error, data)
+		{
+			if(error)
+			{
+				response.render('index',
+				{
+					'Title': Title,
+					'result': 'Error, please try again later.'
+				});
+			}
 
-	
-	
+			if(data != '')
+			{
+				response.render('index',
+				{
+					'Title': Title,
+					'result': 'Log in success.'
+				});
+			}
+
+			response.render('index',
+			{
+				'Title': Title,
+				'result': 'Not found'
+			});
+		});
+	});	
 });
 
 app.post('/register', function(request, response)
@@ -96,54 +108,23 @@ app.post('/register', function(request, response)
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function callback()
 	{
-
-		UserModel.findOne({username: request.body.username}, function(error, data)
+		database.register(request.body.username.toLowerCase(), request.body.password.toLowerCase(), function(error, result)
 		{
 			if(error)
-				console.log(error);
-
-			if(data)
 			{
 				response.render('register',
 				{
 					'Title': Title,
-					'result': 'user found'
+					'result': 'error registering, try again later.'
 				});
-
-				mongoose.connection.close();
 			}
 
-			if(!data)
+			response.render('register',
 			{
-				var user = new UserModel(
-				{
-					username: request.body.username,
-					password: request.body.password
-				});
-
-				
-				user.save(function(error, data)
-				{
-					if(error)
-					{
-						console.log(error);
-						response.render('register',
-						{
-							Title: Title,
-							'result': 'Error registering.'
-						});
-					}
-
-					response.render('register',
-					{
-						Title: Title,
-						'result': request.body.username + ' registered successfully.'
-					});
-					mongoose.connection.close();
-				});
-
-			}
-		});	
+				'Title': Title,
+				'result': result
+			});
+		});
 
 	});
 });
