@@ -7,6 +7,7 @@ express version.
 var express = require('express'),
 	http = require('http'),
 	socket = require('socket.io'),
+	mongoose = require('mongoose'),
 	bodyParser = require('body-parser'),
 	swig = require('swig'),
 	fs = require('fs');
@@ -53,15 +54,97 @@ app.get('/', function(request, response)
 	});
 });
 
+//Create User schema.
+var userSchema = mongoose.Schema(
+{
+	username: String,
+	password: String
+});
+
+//User model.
+var UserModel = mongoose.model('User', userSchema);
+
 app.post('/', function(request, response)
 {
 	console.log('POST OK');
-	console.log(request.body);
+	// console.log(request.body);
+	mongoose.connect('mongodb://localhost');
 
-	response.render('index',
+	var db = mongoose.connection;
+
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function callback()
 	{
-		'Title': Title,
-		'result': 'Post detected',
+		console.log('connection succeed.');
+	});
+
+	
+	
+});
+
+app.post('/register', function(request, response)
+{
+	console.log('REGISTER OK');
+
+	//set connection to mongodb.
+	mongoose.connect('mongodb://localhost');
+
+	var db = mongoose.connection;
+
+
+	//Connect to mongodb.
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function callback()
+	{
+
+		UserModel.findOne({username: request.body.username}, function(error, data)
+		{
+			if(error)
+				console.log(error);
+
+			if(data)
+			{
+				response.render('register',
+				{
+					'Title': Title,
+					'result': 'user found'
+				});
+
+				mongoose.connection.close();
+			}
+
+			if(!data)
+			{
+				var user = new UserModel(
+				{
+					username: request.body.username,
+					password: request.body.password
+				});
+
+				
+				user.save(function(error, data)
+				{
+					if(error)
+					{
+						console.log(error);
+						response.render('register',
+						{
+							Title: Title,
+							'result': 'Error registering.'
+						});
+					}
+
+					response.render('register',
+					{
+						Title: Title,
+						'result': request.body.username + ' registered successfully.'
+					});
+					mongoose.connection.close();
+				});
+
+			}
+		});	
+
 	});
 });
 
