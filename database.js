@@ -2,6 +2,7 @@
 *	Database function for Node.js Chat.
 *	Function usage:
 *	@register(username, password, function(error, data)).
+*	@findByName(username, function(error, data)).
 */
 
 //Load mongodb driver module.
@@ -59,17 +60,16 @@ function register(Username, Password, callback)
 
 function findByName(Username, callback)
 {
-	UserModel.find({username: Username}, function(error, data)
+	UserModel.findOne({username: Username}, function(error, data)
 	{
 		if(error)
 			return callback(error);
 
-		if(data)
-			return callback(null, data);
-
+		callback(null, data);
 		mongoose.connection.close();
 	});
 }
 
+//To public functions.
 exports.register = register;
 exports.findByName = findByName;

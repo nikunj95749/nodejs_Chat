@@ -76,13 +76,25 @@ app.post('/', function(request, response)
 				});
 			}
 
-			if(data != '')
+			if(data)
 			{
-				response.render('index',
+				if(!(request.body.username == data.username && request.body.password == data.password))
 				{
-					'Title': Title,
-					'result': 'Log in success.'
-				});
+					response.render('index',
+					{
+						'Title': Title,
+						'result': 'username/password invalid.'
+					});
+				}
+
+				else
+				{
+					response.render('index',
+					{
+						'Title': Title,
+						'result': 'Log in success.'
+					});
+				}
 			}
 
 			response.render('index',
