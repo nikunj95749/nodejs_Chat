@@ -47,7 +47,11 @@ swig.setDefaults(
 
 app.get('/', function(request, response)
 {
-	console.log('GET OK');
+	if(app.get('env') == 'development')
+	{
+		console.log('GET OK');
+	}
+
 	response.render('index',
 	{
 		'Title': Title,
@@ -57,7 +61,10 @@ app.get('/', function(request, response)
 
 app.post('/', function(request, response)
 {
-	console.log('POST OK');
+	if(app.get('env') == 'development')
+	{
+		console.log('POST OK');
+	}
 	mongoose.connect('mongodb://localhost');
 
 	var db = mongoose.connection;
@@ -108,7 +115,10 @@ app.post('/', function(request, response)
 
 app.post('/register', function(request, response)
 {
-	console.log('REGISTER OK');
+	if(app.get('env') == 'development')
+	{
+		console.log('REGISTER OK');
+	}	
 
 	//set connection to mongodb.
 	mongoose.connect('mongodb://localhost');
@@ -144,7 +154,12 @@ app.post('/register', function(request, response)
 //logger.
 app.use(function(request, response, next)
 {
-	console.log('%s %s', request.method, request.url);
+	if(app.get('env') == 'development')
+	{
+		console.log('%s %s', request.method, request.url);
+	}
+	
+	console.log('connection from: ' + request.ip);
 
 	var file = request.url.slice(1 + request.url.indexOf('/'));
 

@@ -58,13 +58,16 @@ function register(Username, Password, callback)
 	});
 }
 
+//Create a function for finding a name record.
 function findByName(Username, callback)
 {
+	//find the record
 	UserModel.findOne({username: Username}, function(error, data)
 	{
 		if(error)
 			return callback(error);
 
+		//give data record if found.
 		callback(null, data);
 		mongoose.connection.close();
 	});
