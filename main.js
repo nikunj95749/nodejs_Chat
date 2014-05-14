@@ -9,6 +9,8 @@ var express = require('express'),
 	socket = require('socket.io'),
 	mongoose = require('mongoose'),
 	bodyParser = require('body-parser'),
+	cookieParser = require('cookie-parser'),
+	session = require('express-session'),
 	swig = require('swig'),
 	fs = require('fs'),
 	database = require('./database');
@@ -18,6 +20,7 @@ console.log('Loading configuration.');
 var config = fs.readFileSync('config.json');
 var config = JSON.parse(config);
 var port = config.port;
+var Title = config.titl;
 var views = config.views;
 console.log('Configuration loaded.');
 
@@ -25,10 +28,20 @@ console.log('Configuration loaded.');
 var app = express();
 
 app.use(bodyParser());
+app.use(cookieParser());
+app.use(session(
+{
+	secret: 'the user session',
+	key: 'sid',
+	cookie: 
+	{
+		maxAge: 60000,
+		httpOnly: false
+	}
+}));
 
 
 //Global vars
-var Title = "Node.js Chat";
 var result = '';
 
 
@@ -52,10 +65,21 @@ app.get('/', function(request, response)
 		console.log('GET OK');
 	}
 
+	var sess = request.session;
+
+	if(sess.views)
+		sess.views++;
+
+	else
+		sess.views = 1;
+
+	console.log(sess);
+
 	response.render('index',
 	{
 		'Title': Title,
 		'result': result,
+		'views': sess.views,
 	});
 });
 
@@ -157,9 +181,8 @@ app.use(function(request, response, next)
 	if(app.get('env') == 'development')
 	{
 		console.log('%s %s', request.method, request.url);
+		console.log('connection from: ' + request.ip);
 	}
-	
-	console.log('connection from: ' + request.ip);
 
 	var file = request.url.slice(1 + request.url.indexOf('/'));
 
@@ -169,7 +192,7 @@ app.use(function(request, response, next)
 		{
 			//Var to be named in the render : value;
 			'Title': Title,
-			'result': result,
+			'result': result
 		});
 	});
 
@@ -184,4 +207,9 @@ app.use(express.static(__dirname + '/public'));
 http.createServer(app).listen(port, function()
 {
 	console.log('Server listening to ' + port);
+
+	if(app.get('env') == 'development')
+	{
+		console.log('Server runninng in development mode.');
+	}
 });
