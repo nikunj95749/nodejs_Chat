@@ -1,0 +1,81 @@
+html, body
+{
+	height: 100%;
+	width: 100%;
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    margin: 10px;
+}
+
+input
+{
+    margin: 8px;
+    padding: 5px;
+}
+
+.top
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	width: 100%;
+	height: 8%;
+	background: #000000;
+	background: -moz-linear-gradient(top,  #000000 0%, #45484d 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#45484d));
+	background: -webkit-linear-gradient(top,  #000000 0%,#45484d 100%);
+	background: -o-linear-gradient(top,  #000000 0%,#45484d 100%);
+	background: -ms-linear-gradient(top,  #000000 0%,#45484d 100%);
+	background: linear-gradient(to bottom,  #000000 0%,#45484d 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#45484d',GradientType=0 );
+}
+
+.content
+{
+	position: relative;
+	top: 8%;
+	width: 100%;
+	height: 86%;
+}
+
+.left
+{
+    color: #FFFFFF;
+	position: absolute;
+	float: left;
+	height: 100%;
+	width: 12%;
+	background-color: #000050;
+}
+
+.right
+{
+	position: absolute;
+	left: 12%;
+	float: right;
+	padding: 10px;
+	width: 88%;
+	height: 100%;
+	-webkit-box-shadow:inset 0 0 4px 2px #000000;
+	box-shadow:inset 0 0 4px 2px #000000;
+}
+
+.foot
+{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	background-color: #EEEEEE;
+	width: 100%;
+	height: 6%;
+	bottom: 0px;
+}
+
+.white
+{
+	color:#FFFFFF;
+}

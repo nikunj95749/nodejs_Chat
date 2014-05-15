@@ -5,7 +5,8 @@ express version.
 
 //Load modules.
 var express = require('express'),
-	socket = require('socket.io'),
+	server = require('http'),
+	io = require('socket.io'),
 	swig = require('swig'),
 	fs = require('fs');
 
@@ -22,7 +23,6 @@ var app = express();
 
 
 //Global vars
-var test = "Hello";
 var Title = "Node.js Chat";
 
 app.engine('html', swig.renderFile);
@@ -35,6 +35,14 @@ swig.setDefaults(
 	cache: false
 });
 
+app.get('/', function(request, response)
+{
+	response.render('index',
+	{
+		'Title': Title
+	});
+});
+
 //logger.
 app.use(function(request, response, next)
 {
@@ -42,15 +50,15 @@ app.use(function(request, response, next)
 
 	var file = request.url.slice(1 + request.url.indexOf('/'));
 
-	app.get(request.url, function(request, response)
-	{
-		response.render(file,
-		{
-			//Var to be named in the render : value;
-			'test': test,
-			'Title': Title,
-		});
-	});
+	// app.get(request.url, function(request, response)
+	// {
+	// 	response.render(file,
+	// 	{
+	// 		//Var to be named in the render : value;
+	// 		'test': test,
+	// 		'Title': Title,
+	// 	});
+	// });
 
 	next();
 });
@@ -59,4 +67,19 @@ app.use(function(request, response, next)
 app.use(express.static(__dirname + '/public'));
 
 //Run the app.
-app.listen(port);
+var server = server.createServer(app).listen(port);
+server;
+
+//Run the socket.
+var io = io.listen(server);
+
+io.sockets.on('connection', function(socket)
+{
+	socket.on('Message_send', function(data)
+	{
+		io.sockets.emit('Message_respond',
+		{
+			data: data
+		});
+	});
+});
