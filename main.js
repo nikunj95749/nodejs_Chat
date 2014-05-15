@@ -8,6 +8,7 @@ var express = require('express'),
 	server = require('http'),
 	io = require('socket.io'),
 	swig = require('swig'),
+	escape_html = require('escape-html'),
 	fs = require('fs');
 
 //Load config.
@@ -48,17 +49,9 @@ app.use(function(request, response, next)
 {
 	console.log('%s %s', request.method, request.url);
 
-	var file = request.url.slice(1 + request.url.indexOf('/'));
+	console.log('connection from: ' + request.ip);
 
-	// app.get(request.url, function(request, response)
-	// {
-	// 	response.render(file,
-	// 	{
-	// 		//Var to be named in the render : value;
-	// 		'test': test,
-	// 		'Title': Title,
-	// 	});
-	// });
+	var file = request.url.slice(1 + request.url.indexOf('/'));
 
 	next();
 });
@@ -72,14 +65,19 @@ server;
 
 //Run the socket.
 var io = io.listen(server);
+io.set('log', 0);
 
 io.sockets.on('connection', function(socket)
 {
 	socket.on('Message_send', function(data)
 	{
+		var username = escape_html(data['username']),
+			message = escape_html(data['message']);
+
 		io.sockets.emit('Message_respond',
 		{
-			data: data
+			user: username,
+			message: message
 		});
 	});
 });

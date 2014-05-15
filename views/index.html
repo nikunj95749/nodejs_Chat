@@ -29,7 +29,6 @@
 			<h4 class='white'>Connected</h4>
 		</div>
 		<div class='right' id="message-box">
-			<h4>Message</h4>
 		</div>
 	</div>
 	<div class='foot'>
@@ -48,8 +47,9 @@
 	{
 		var message_box = document.getElementById('message-box');
 
-		message_box.innerHTML = message_box.innerHTML + '<br>' + '<pre><b>' + data['data']['username'] + ':</b> ' + '<p>' + data['data']['message'] + '</p></pre>';
-		
+		message_box.innerHTML = message_box.innerHTML + '<br>' + '<pre><b>' + data['user'] + ':</b> ' + '<p>' + data['message'] + '</p></pre>';
+
+		message_box.scrollTop = message_box.scrollHeight;
 	});
 
 	function init()
@@ -74,6 +74,7 @@
 					'message': message
 				});
 			}
+			document.getElementById('usermessage').value = '';
 		}
 
 		else
