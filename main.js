@@ -47,12 +47,11 @@ app.get('/', function(request, response)
 //logger.
 app.use(function(request, response, next)
 {
-	console.log('%s %s', request.method, request.url);
-
-	console.log('connection from: ' + request.ip);
-
-	var file = request.url.slice(1 + request.url.indexOf('/'));
-
+	if(app.get('env') == 'development')
+	{
+		console.log('%s %s', request.method, request.url);
+		console.log('connection from: ' + request.ip);
+	}
 	next();
 });
 
