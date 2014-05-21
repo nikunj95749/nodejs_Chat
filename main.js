@@ -67,17 +67,85 @@ server;
 var io = io.listen(server);
 io.set('log', 0);
 
+var guest = 0;
+var users = [];
+
+//When socket connects.
 io.sockets.on('connection', function(socket)
 {
-	socket.on('Message_send', function(data)
+	//Set Guest for the session.
+	socket.set('username', 'guest' + guest, function()
 	{
-		var username = escape_html(data['username']),
-			message = escape_html(data['message']);
+		guest++;
+		var current = 'guest' + guest;
 
-		io.sockets.emit('Message_respond',
+		users.push('guest' + guest);
+
+		//Send the users connected.
+		io.sockets.emit('users', 
 		{
-			user: username,
-			message: message
+			users: li(users)
+		});
+
+		//When a message from the browser is recieved.
+		socket.on('Message_send', function(data)
+		{
+
+			//Escape all html tags.
+			var username = escape_html(data['username']),
+				message = escape_html(data['message']);
+
+			//Rename the guest for the username.
+			socket.set('username', username, function()
+			{
+				var index = users.indexOf(current);
+				users[index] = username;
+
+				guest --;
+
+				//Emit the message.
+				io.sockets.emit('Message_respond',
+				{
+					user: username,
+					message: message
+				});
+
+				//Send the users connected.
+				io.sockets.emit('users',
+				{
+					users: li(users)
+				});
+			});
+		});
+	});
+
+	//On disconnect/timeout.
+	socket.on('disconnect', function()
+	{
+		//Get the user disconnected.
+		socket.get('username', function(error, data)
+		{
+			var index = users.indexOf(data);
+			users.splice(index,1);
+
+			io.sockets.emit('users',
+			{
+				users: li(users)
+			});
 		});
 	});
 });
+
+//Transform all array to <li>tags.
+function li(array)
+{
+	var length = array.length,
+		result = '';
+
+	for (var i = 0; i < length; i++)
+	{
+		result += '<li>' + array[i] + '</li>';
+	}
+
+	return result;
+}

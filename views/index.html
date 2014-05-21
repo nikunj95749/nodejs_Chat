@@ -27,6 +27,8 @@
 	<div class='content'>
 		<div class='left'>
 			<h4 class='white'>Connected</h4>
+			<ul id='connect'>
+			</ul>
 		</div>
 		<div class='right' id="message-box">
 		</div>
@@ -50,6 +52,19 @@
 		message_box.innerHTML = message_box.innerHTML + '<br>' + '<pre><b>' + data['user'] + ':</b> ' + '<p>' + data['message'] + '</p></pre>';
 
 		message_box.scrollTop = message_box.scrollHeight;
+	});
+
+	socketio.on('users', function(data)
+	{
+		var users = document.getElementById('connect');
+
+		users.innerHTML = data['users'];
+	});
+
+	socketio.on('user', function(data)
+	{
+		var users = document.getElementById('connect');
+
 	});
 
 	function init()
