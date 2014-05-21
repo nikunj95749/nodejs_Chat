@@ -98,9 +98,8 @@ io.sockets.on('connection', function(socket)
 			socket.set('username', username, function()
 			{
 				var index = users.indexOf(current);
-				users[index] = username;
-
-				guest --;
+				current = username;
+				users[index] = current;
 
 				//Emit the message.
 				io.sockets.emit('Message_respond',
