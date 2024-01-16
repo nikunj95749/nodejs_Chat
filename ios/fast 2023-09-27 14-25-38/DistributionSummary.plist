@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fast.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>3</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>C89E274E178477C39F14B0EE11209EFFFF9600CF</string>
+				<key>dateExpires</key>
+				<string>29/12/23</string>
+				<key>type</key>
+				<string>Apple Development</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>C89E274E178477C39F14B0EE11209EFFFF9600CF</string>
+						<key>dateExpires</key>
+						<string>29/12/23</string>
+						<key>type</key>
+						<string>Apple Development</string>
+					</dict>
+					<key>name</key>
+					<string>OpenSSL.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>4997553G25</string>
+						<key>name</key>
+						<string>Jason Primrose</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.1.180</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>4997553G25.com.app.fastapp</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>4997553G25</string>
+				<key>get-task-allow</key>
+				<true/>
+			</dict>
+			<key>name</key>
+			<string>fast.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>6d67ddc9-3ac4-4f87-9a93-fdc14b113aa9</string>
+				<key>dateExpires</key>
+				<string>27/03/24</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: com.app.fastapp</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>4997553G25</string>
+				<key>name</key>
+				<string>Jason Primrose</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>24</string>
+		</dict>
+	</array>
+</dict>
+</plist>
