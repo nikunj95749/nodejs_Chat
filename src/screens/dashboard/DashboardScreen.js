@@ -122,6 +122,7 @@ import {
 } from "../../../store/workOrderForOffline";
 import useCheckNetworkInfo from "../../hooks/useCheckNetworkInfo";
 import AsyncStorage from "@react-native-community/async-storage";
+import PermissionModal from "../../components/PermissionModal";
 // NewWO,
 // InProgressWO,
 // SubmittedWO,
@@ -191,7 +192,6 @@ const DashboardScreen = ({ navigation, route }) => {
   const { width, height } = useWindowDimensions();
   const refRBSheetForAppUpdate = useRef();
   const { loading, result } = useDeviceName();
-
   const { internetAvailable } = useCheckNetworkInfo();
 
   const userDetails = useSelector((state) => state.auth?.userDetails ?? "");
@@ -890,26 +890,26 @@ const DashboardScreen = ({ navigation, route }) => {
     getPickUpAndDropCheckList();
   }, []);
 
-  useEffect(() => {
-    check(
-      Platform.select({
-        android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      })
-    )
-      .then((result) => {
-        // 'granted'
-        request(
-          Platform.select({
-            android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-            ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-          })
-        ).then((reqResult) => {
-          getCurrentLocation();
-        });
-      })
-      .catch(() => {});
-  }, []);
+  // useEffect(() => {
+  //   check(
+  //     Platform.select({
+  //       android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  //       ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+  //     })
+  //   )
+  //     .then((result) => {
+  //       // 'granted'
+  //       request(
+  //         Platform.select({
+  //           android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  //           ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+  //         })
+  //       ).then((reqResult) => {
+  //      getCurrentLocation();
+  //       });
+  //     })
+  //     .catch(() => {});
+  // }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -1213,6 +1213,8 @@ const DashboardScreen = ({ navigation, route }) => {
           </View>
         </View>
       </RBSheet>
+
+      <PermissionModal/>
     </View>
   );
 };

@@ -347,6 +347,14 @@ export default function TextArea({data, formSample = {}}) {
           onChangeText={(txt) => onChange(txt)}
           value={txtValue}
           style={{flex: 1}}
+          onBlur={(e)=>{
+            const text = e._dispatchInstances.memoizedProps.text
+              .trim()
+              .toLowerCase();
+            if (/^(na|n\/a)$/i.test(text)) {
+              setTxtValue("N/A");
+            }
+          }}
         />
         <View>
           {data?.name === 'Summary' ? (
