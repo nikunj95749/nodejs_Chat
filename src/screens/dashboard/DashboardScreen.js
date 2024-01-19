@@ -221,8 +221,8 @@ const DashboardScreen = ({ navigation, route }) => {
       ?.filter((obj) => !obj?.data?.shouldMoveToCompleted)
       ?.filter(
         (item) =>
-          dateDifference(item.data.pendingData.JobDate) > 24 &&
-          dateDifference(item.data.pendingData.JobDate) <= 36 ||
+          (dateDifference(item.data.pendingData.JobDate) > 24 &&
+            dateDifference(item.data.pendingData.JobDate) <= 36) ||
           (dateDifference(item.data.pendingData.JobDate) > 36 &&
             !item.data.pendingData.IsUnlocked)
       );
@@ -1214,7 +1214,7 @@ const DashboardScreen = ({ navigation, route }) => {
         </View>
       </RBSheet>
 
-      <PermissionModal/>
+      <PermissionModal />
     </View>
   );
 };

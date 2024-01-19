@@ -1,17 +1,18 @@
-import {isEmpty} from 'lodash';
-import React, {useEffect, useMemo, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {setDispatchFormData, setFormValidation} from '../../store/form';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import {RFValue} from 'react-native-responsive-fontsize';
+import { isEmpty } from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
+import { Alert, StyleSheet, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { setDispatchFormData, setFormValidation } from "../../store/form";
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { RFValue } from "react-native-responsive-fontsize";
 
-import {RED, responsiveScale} from '../styles';
-import {TxtPoppinMedium} from './text/TxtPoppinMedium';
-import store from '../../store/configureStore';
-import Info from './Info';
+import { RED, responsiveScale } from "../styles";
+import { TxtPoppinMedium } from "./text/TxtPoppinMedium";
+import store from "../../store/configureStore";
+import Info from "./Info";
+import { notifyDispatchJobInjury } from "../resources/baseServices/form";
 
-const SwitchController = ({data, formSample = {}}) => {
+const SwitchController = ({ data, formSample = {} }) => {
   const arrData = useMemo(() => {
     return JSON.parse(data?.options);
   }, []);
@@ -23,11 +24,11 @@ const SwitchController = ({data, formSample = {}}) => {
   const dispatch = useDispatch();
 
   const isTriggerValidation = useSelector(
-    (state) => state.form?.isValidate ?? {},
+    (state) => state.form?.isValidate ?? {}
   );
 
   const formSampleData = useSelector(
-    (state) => state.form?.formSampleData ?? [],
+    (state) => state.form?.formSampleData ?? []
   );
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const SwitchController = ({data, formSample = {}}) => {
         const formField = [...latestDispatchFormData?.formFields]?.find(
           (obj) => {
             return obj?.formFieldId === data?.id;
-          },
+          }
         );
         if (!isEmpty(formField)) {
           setSelectedSegmentIndex(arrData?.indexOf(formField?.textValue));
@@ -107,7 +108,6 @@ const SwitchController = ({data, formSample = {}}) => {
         };
 
         dispatch(setDispatchFormData(finalDispatchData));
-        
       }
     } else {
       const findFormSample = formSampleData?.find((obj) => {
@@ -125,9 +125,7 @@ const SwitchController = ({data, formSample = {}}) => {
         };
 
         dispatch(setDispatchFormData(finalDispatchData));
-        
       }
-      
     }
 
     let formField = [];
@@ -167,7 +165,7 @@ const SwitchController = ({data, formSample = {}}) => {
           ...dispatchObj,
           formFields: [...dispatchObj?.formFields]?.map((obj) => {
             if (obj?.formFieldId === data?.id) {
-              return {...obj, textValue: arrData?.[index]};
+              return { ...obj, textValue: arrData?.[index] };
             }
             return obj;
           }),
@@ -181,14 +179,14 @@ const SwitchController = ({data, formSample = {}}) => {
           } else {
             return obj;
           }
-        },
+        }
       );
 
       dispatch(
         setDispatchFormData({
           ...latestDispatchFormData,
           formSamples: finalFormSample,
-        }),
+        })
       );
     } else {
       if (!isEmpty(latestDispatchFormData?.formFields)) {
@@ -216,7 +214,7 @@ const SwitchController = ({data, formSample = {}}) => {
           ...latestDispatchFormData,
           formFields: [...latestDispatchFormData?.formFields]?.map((obj) => {
             if (obj?.formFieldId === data?.id) {
-              return {...obj, textValue: arrData?.[index]};
+              return { ...obj, textValue: arrData?.[index] };
             }
             return obj;
           }),
@@ -225,16 +223,37 @@ const SwitchController = ({data, formSample = {}}) => {
       dispatch(setDispatchFormData(finalData));
     }
   };
+  const postNotifyDispatchJobInjury = async () => {
+    try {
+      const latestDispatchFormData = store?.getState()?.form?.dispatchFormData;
+      const userDetail = store?.getState()?.auth?.userDetails;
+      const data = {
+        userId: userDetail.id,
+        dispatchId: latestDispatchFormData?.form?.dispatchId,
+      };
+      console.log(
+        "latestDispatchFormData = ",
+        latestDispatchFormData?.form?.dispatchId,
+        "=== ",
+        userDetail.id
+      );
+      const res = notifyDispatchJobInjury(data);
+      console.log("res......................", res);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return (
     <View
       style={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         minHeight: 40,
         marginBottom: 5,
-      }}>
-      <View style={{minHeight: 30, flexDirection: 'row', flex: 1}}>
+      }}
+    >
+      <View style={{ minHeight: 30, flexDirection: "row", flex: 1 }}>
         <TxtPoppinMedium
           style={{
             fontSize: RFValue(11),
@@ -247,34 +266,60 @@ const SwitchController = ({data, formSample = {}}) => {
               fontSize: RFValue(11),
               color: RED,
             }}
-            title={'*'}
+            title={"*"}
           />
         ) : null}
-        { data.tooltipText && <Info content={`${data.tooltipText}`} style={{marginLeft:2}} />}
+        {data.tooltipText && (
+          <Info content={`${data.tooltipText}`} style={{ marginLeft: 2 }} />
+        )}
       </View>
 
       <View
         style={{
           height: 30,
           paddingLeft: 7,
-        }}>
+        }}
+      >
         <SegmentedControl
           values={arrData}
           selectedIndex={selectedSegmentIndex}
           fontStyle={{
-            fontFamily: 'Poppins-Medium',
+            fontFamily: "Poppins-Medium",
             fontSize: RFValue(9),
           }}
           style={{
             height: 30,
             width: 150,
             borderWidth: 1,
-            borderColor: isValidateText ? 'rgba(0,0,0,0)' : RED,
-            alignSelf: 'flex-end',
+            borderColor: isValidateText ? "rgba(0,0,0,0)" : RED,
+            alignSelf: "flex-end",
           }}
           onChange={(event) => {
-            onChange(event.nativeEvent.selectedSegmentIndex);
             setSelectedSegmentIndex(event.nativeEvent.selectedSegmentIndex);
+            if (
+              data.id === 200 &&
+              event.nativeEvent.selectedSegmentIndex === 0
+            ) {
+              Alert.alert("Are you sure?", "", [
+                {
+                  text: "Confirm",
+                  onPress: async () => {
+                    onChange(0);
+                    setSelectedSegmentIndex(0);
+                    postNotifyDispatchJobInjury();
+                  },
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => {
+                    setSelectedSegmentIndex(1);
+                  },
+                },
+              ]);
+            } else {
+              onChange(event.nativeEvent.selectedSegmentIndex);
+              setSelectedSegmentIndex(event.nativeEvent.selectedSegmentIndex);
+            }
           }}
         />
       </View>

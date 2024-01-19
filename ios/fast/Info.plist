@@ -47,12 +47,12 @@
 	<string>In order to upload images from your own photo library, we need your permission.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>In order to upload images from your own photo library, we need your permission.</string>
-  	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  	<string>Allow $(PRODUCT_NAME) to access your location to support a better experience by connecting you with others near you and displaying geo-targeted content</string>
-  	<key>NSLocationAlwaysUsageDescription</key>
-  	<string>Allow $(PRODUCT_NAME) to access your location to support a better experience by connecting you with others near you and displaying geo-targeted content</string>
-  	<key>NSLocationWhenInUseUsageDescription</key>
-  	<string>Allow $(PRODUCT_NAME) to access your location to support a better experience by connecting you with others near you and displaying geo-targeted content</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to access your location to support a better experience by connecting you with others near you and displaying geo-targeted content</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to access your location to support a better experience by connecting you with others near you and displaying geo-targeted content</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to access your location to support a better experience by connecting you with others near you and displaying geo-targeted content</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Bold.ttf</string>
