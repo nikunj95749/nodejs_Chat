@@ -1,9 +1,9 @@
-import {isEmpty} from 'lodash';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, TextInput, Platform} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import store from '../../store/configureStore';
-import {setDispatchFormData, setFormValidation} from '../../store/form';
+import { isEmpty } from "lodash";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, TextInput, Platform } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import store from "../../store/configureStore";
+import { setDispatchFormData, setFormValidation } from "../../store/form";
 
 import {
   DARK_GRAY,
@@ -12,16 +12,16 @@ import {
   RED,
   responsiveScale,
   WHITE,
-} from '../styles';
-import {TxtPoppinMedium} from './text/TxtPoppinMedium';
-import {RFValue} from 'react-native-responsive-fontsize';
-import Info from './Info';
+} from "../styles";
+import { TxtPoppinMedium } from "./text/TxtPoppinMedium";
+import { RFValue } from "react-native-responsive-fontsize";
+import Info from "./Info";
 
 export default function TextWithTitle({
   data,
   isFromTable = false,
   onChangeTextValue = () => {},
-  value = '',
+  value = "",
   RoundOff = 0,
   editable = true,
   formSample = {},
@@ -30,10 +30,10 @@ export default function TextWithTitle({
   const [isValidateText, setIsValidateText] = useState(true);
 
   const dispatchFormData = useSelector(
-    (state) => state.form?.dispatchFormData ?? {},
+    (state) => state.form?.dispatchFormData ?? {}
   );
   const isTriggerValidation = useSelector(
-    (state) => state.form?.isValidate ?? {},
+    (state) => state.form?.isValidate ?? {}
   );
 
   const dispatch = useDispatch();
@@ -90,11 +90,11 @@ export default function TextWithTitle({
       if (RoundOff > 0) {
         if (regex.test(text)) {
           setTxtValue(text);
-          onChangeTextValue({value: text, id: data?.id});
+          onChangeTextValue({ value: text, id: data?.id });
         }
       } else {
         setTxtValue(text);
-        onChangeTextValue({value: text, id: data?.id});
+        onChangeTextValue({ value: text, id: data?.id });
       }
     }
     if (isFromTable === false) {
@@ -150,14 +150,14 @@ export default function TextWithTitle({
             } else {
               return obj;
             }
-          },
+          }
         );
 
         dispatch(
           setDispatchFormData({
             ...dispatchFormData,
             formSamples: finalFormSample,
-          }),
+          })
         );
       } else {
         const formField = [
@@ -188,7 +188,11 @@ export default function TextWithTitle({
               ...store?.getState()?.form?.dispatchFormData?.formFields,
             ]?.map((obj) => {
               if (obj?.formFieldId === data?.id) {
-                return {...obj, textValue: text, isRequired: data?.isRequired};
+                return {
+                  ...obj,
+                  textValue: text,
+                  isRequired: data?.isRequired,
+                };
               }
               return obj;
             }),
@@ -200,8 +204,8 @@ export default function TextWithTitle({
   };
 
   return (
-    <View style={{alignItems: 'center', width: '100%', marginBottom: 10}}>
-      <View style={{flexDirection: 'row', width: '100%'}}>
+    <View style={{ alignItems: "center", width: "100%", marginBottom: 10 }}>
+      <View style={{ flexDirection: "row", width: "100%" }}>
         <TxtPoppinMedium
           style={{
             fontSize: RFValue(11),
@@ -214,48 +218,54 @@ export default function TextWithTitle({
               fontSize: RFValue(11),
               color: RED,
             }}
-            title={'*'}
+            title={"*"}
           />
         ) : null}
-       { data.tooltipText && <Info content={`${data.tooltipText}`}/>}
+        {data.tooltipText && <Info content={`${data.tooltipText}`} />}
       </View>
 
       <View
         style={{
-          height: Platform.OS === 'ios' ? 35 : null,
-          width: '100%',
+          height: Platform.OS === "ios" ? 35 : null,
+          width: "100%",
           paddingLeft: 10,
           backgroundColor: WHITE,
           borderWidth: 1,
           borderColor: isValidateText ? LIGHT_GRAY : RED,
           borderRadius: 10,
-        }}>
+        }}
+      >
         <TextInput
           keyboardType={
-            data?.fieldType === 'Number' ? 'decimal-pad' : 'default'
+            data?.fieldType === "Number" ? "decimal-pad" : "default"
           }
           placeholder={data?.placeholder}
           placeholderTextColor={DARK_GRAY}
-          onBlur={() => {
+          onBlur={(e) => {
             if (isFromTable === true) {
               const regex = /^[0-9]*\.?[0-9]*$/;
               if (RoundOff > 0) {
                 if (regex.test(txtValue)) {
-                  if (txtValue != '') {
+                  if (txtValue != "") {
                     setTxtValue(parseFloat(txtValue).toFixed(RoundOff));
-                  onChangeTextValue({
-                    value: parseFloat(txtValue).toFixed(RoundOff),
-                    id: data?.id,
-                  });
+                    onChangeTextValue({
+                      value: parseFloat(txtValue).toFixed(RoundOff),
+                      id: data?.id,
+                    });
                   }
-                  
                 }
               }
+            }
+            const text = e._dispatchInstances.memoizedProps.text
+              .trim()
+              .toLowerCase();
+            if (/^(na|n\/a)$/i.test(text)) {
+              setTxtValue("N/A");
             }
           }}
           onChangeText={(txt) => onChange(txt)}
           value={txtValue}
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           editable={editable}
         />
       </View>
@@ -268,8 +278,8 @@ const styles = StyleSheet.create({
   addAndCancelButtonView: {
     height: 70,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: ORANGE,
   },
 });

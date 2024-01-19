@@ -72,7 +72,10 @@ const API = {
 
   PICKUP_DROP_REQUEST:BASE_URL + '/DispatchForm/appPickupRequest',
 
-  GET_USER_INFO : BASE_URL + '/DispatchForm/getDispatchMoreInfo'
+  GET_USER_INFO : BASE_URL + '/DispatchForm/getDispatchMoreInfo',
+
+
+  NOTIFY_DISPATCH_JOB_INJURY : BASE_URL + '/DispatchForm/notifyDispatchJobInjury',
 
 };
 

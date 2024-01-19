@@ -156,7 +156,7 @@ const PendingWorkOrdersScreen = ({ navigation, route }) => {
                 !checkIsFutureDate(item?.data?.pendingData.JobDate)
               }
               rightOpenValue={-330}
-              leftOpenValue={220}
+              leftOpenValue={190}
             >
               <PendingWorkItemSwipeView
                 item={item?.data?.pendingData}

@@ -26,6 +26,8 @@
 		469BDD25F3C9450D8680386B /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1EE1980C8DBE4F93BFF6A851 /* Poppins-Light.ttf */; };
 		C07C2576F029C8D777E9DBE8 /* libPods-fast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 645954F83972EAF6F1AC8FE4 /* libPods-fast.a */; };
 		CF3BF53FDE9E417B9DFC449E /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6DD3D8D6E73E431C8C051CF6 /* Poppins-SemiBold.ttf */; };
+		ECBA24AF2B59B59500273BBF /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ECBA24AE2B59B59500273BBF /* Settings.bundle */; };
+		ECBA24B52B5A745E00273BBF /* CameraPermissionModule.h in Sources */ = {isa = PBXBuildFile; fileRef = ECBA24B42B5A745E00273BBF /* CameraPermissionModule.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +48,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* fastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fastTests.m; sourceTree = "<group>"; };
 		04B48E3328E2380100D5AA87 /* arrow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow2.png; sourceTree = "<group>"; };
@@ -80,6 +81,8 @@
 		B0FF53AB1CCA31A18401AD49 /* Pods-fast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fast.release.xcconfig"; path = "Target Support Files/Pods-fast/Pods-fast.release.xcconfig"; sourceTree = "<group>"; };
 		BDB5F32B2F35FCFEA601C5B1 /* libPods-fast-fastTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fast-fastTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1054A0AE8F847C2A5F12631 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		ECBA24AE2B59B59500273BBF /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		ECBA24B42B5A745E00273BBF /* CameraPermissionModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraPermissionModule.h; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -116,14 +119,15 @@
 		13B07FAE1A68108700A75B9A /* fast */ = {
 			isa = PBXGroup;
 			children = (
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				1D873FBC2ABCCE3400832726 /* NetworkModule.m */,
+				ECBA24AE2B59B59500273BBF /* Settings.bundle */,
 				1D873FC62ABCD07900832726 /* NetworkModule.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				1D873FC42ABCCF5500832726 /* File.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				ECBA24B42B5A745E00273BBF /* CameraPermissionModule.h */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				1D873FC12ABCCF5400832726 /* fast-Bridging-Header.h */,
@@ -307,6 +311,7 @@
 				04B48E3B28E2380200D5AA87 /* arrow4.png in Resources */,
 				04B48E3F28E2380200D5AA87 /* arrow3.png in Resources */,
 				04B48E3E28E2380200D5AA87 /* arrow1.png in Resources */,
+				ECBA24AF2B59B59500273BBF /* Settings.bundle in Resources */,
 				1D887D062927EF7F004B1D9A /* square.png in Resources */,
 				04B48E3A28E2380200D5AA87 /* arrow2.png in Resources */,
 				04B48E4028E2380200D5AA87 /* arrow6.png in Resources */,
@@ -449,6 +454,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				1D873FC52ABCCF5500832726 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				ECBA24B52B5A745E00273BBF /* CameraPermissionModule.h in Sources */,
 				1D873FBD2ABCCE3400832726 /* NetworkModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,7 +494,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "fast-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -523,7 +529,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "fast-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -6,7 +6,6 @@ import TopBar from "../../components/TopBar";
 import { WHITE } from "../../styles";
 import WebView from "react-native-webview";
 
-
 export default function HtmlViewerScreen({ navigation, route }) {
   const item = route.params;
 
@@ -19,11 +18,7 @@ export default function HtmlViewerScreen({ navigation, route }) {
     >
       <TopBar onBack={() => navigation.goBack()} headingText={"More Info"} />
       <View style={{ flex: 1 }}>
-      <WebView
-    originWhitelist={['*']}
-    source={{ html: `${item.result}` }}
-/>
-        
+        <WebView originWhitelist={["*"]} source={{ html: `${item.result}` }} />
       </View>
     </SafeAreaView>
   );
