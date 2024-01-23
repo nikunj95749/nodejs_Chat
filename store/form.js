@@ -1,24 +1,25 @@
-import produce from 'immer';
+import produce from "immer";
 
-const SET_FORM_TEMPLATE = 'SET_FORM_TEMPLATE';
-const SET_COMMON_COLLECTION = 'SET_COMMON_COLLECTION';
-const SET_DISPATCH_FORM_DATA = 'SET_DISPATCH_FORM_DATA';
-const SET_PREVIEW_FLAG = 'SET_PREVIEW_FLAG';
-const RESET_PREVIEW_FLAG = 'RESET_PREVIEW_FLAG';
-const SET_IS_VALIDATE = 'SET_IS_VALIDATE';
-const SET_IS_LOADING_PREVIEW = 'SET_IS_LOADING_PREVIEW';
-const SET_IS_LOADING_REVIEW = 'SET_IS_LOADING_REVIEW';
-const SET_IS_LOADING_SAVE_AS_DRAFT = 'SET_IS_LOADING_SAVE_AS_DRAFT';
-const SET_FORM_SAMPLE_DATA = 'SET_FORM_SAMPLE_DATA';
-const SET_ALL_REPORT_TEMPLETE = 'SET_ALL_REPORT_TEMPLETE';
-const SET_FORM_SAMPLE_FILTERED_DATA = 'SET_FORM_SAMPLE_FILTERED_DATA';
-const SET_COPY_PRIOR_FORM_FIELD_DATA = 'SET_COPY_PRIOR_FORM_FIELD_DATA';
-const SET_SUMMARY = 'SET_SUMMARY';
-const SET_SUMMARY_LIST = 'SET_SUMMARY_LIST';
-const SET_PICKUP_DROP = 'SET_PICKUP_DROP';
-const SET_SYNCH_OFFFLINE_LOADER = 'SET_SYNCH_OFFFLINE_LOADER';
-const SET_FORM_EMPTY = 'SET_FORM_EMPTY';
-const SET_SELECTED_FORM_ITEM = 'SET_SELECTED_FORM_ITEM';
+const SET_FORM_TEMPLATE = "SET_FORM_TEMPLATE";
+const SET_COMMON_COLLECTION = "SET_COMMON_COLLECTION";
+const SET_DISPATCH_FORM_DATA = "SET_DISPATCH_FORM_DATA";
+const SET_PREVIEW_FLAG = "SET_PREVIEW_FLAG";
+const RESET_PREVIEW_FLAG = "RESET_PREVIEW_FLAG";
+const SET_IS_VALIDATE = "SET_IS_VALIDATE";
+const SET_IS_LOADING_PREVIEW = "SET_IS_LOADING_PREVIEW";
+const SET_IS_LOADING_REVIEW = "SET_IS_LOADING_REVIEW";
+const SET_IS_LOADING_SAVE_AS_DRAFT = "SET_IS_LOADING_SAVE_AS_DRAFT";
+const SET_FORM_SAMPLE_DATA = "SET_FORM_SAMPLE_DATA";
+const SET_ALL_REPORT_TEMPLETE = "SET_ALL_REPORT_TEMPLETE";
+const SET_FORM_SAMPLE_FILTERED_DATA = "SET_FORM_SAMPLE_FILTERED_DATA";
+const SET_COPY_PRIOR_FORM_FIELD_DATA = "SET_COPY_PRIOR_FORM_FIELD_DATA";
+const SET_SUMMARY = "SET_SUMMARY";
+const SET_SUMMARY_LIST = "SET_SUMMARY_LIST";
+const SET_PICKUP_DROP = "SET_PICKUP_DROP";
+const SET_SYNCH_OFFFLINE_LOADER = "SET_SYNCH_OFFFLINE_LOADER";
+const SET_FORM_EMPTY = "SET_FORM_EMPTY";
+const SET_SELECTED_FORM_ITEM = "SET_SELECTED_FORM_ITEM";
+const SET_JOB_INJURY_NOTIFY_TEXT = "SET_JOB_INJURY_NOTIFY_TEXT";
 
 const initialState = {
   formTemplate: [],
@@ -34,7 +35,7 @@ const initialState = {
     {
       FormFieldId: 8,
       TextValue:
-        'Line hill switch gear;\n> Provided continues inspection for installation of 3/4” epoxy bolts for switchgear structure hold down, place (4) 3/4”x8” bolts with6” embedment using Hilti RE 590 (exp 1/23). Signed checklist for approved drawings. Reference P-014.\n\nFoothill/Grand;\n> Provided periodic observation of placement of rebar for soffit openings, end diaphragms and girder walls. Work in progress.',
+        "Line hill switch gear;\n> Provided continues inspection for installation of 3/4” epoxy bolts for switchgear structure hold down, place (4) 3/4”x8” bolts with6” embedment using Hilti RE 590 (exp 1/23). Signed checklist for approved drawings. Reference P-014.\n\nFoothill/Grand;\n> Provided periodic observation of placement of rebar for soffit openings, end diaphragms and girder walls. Work in progress.",
     },
   ],
   dispatchFormData: {},
@@ -45,6 +46,7 @@ const initialState = {
   isLoadingSaveAsDraft: false,
   arrSummary: {},
   isShowSyncOfflineLoader: false,
+  jobInjuryNotifyText: "",
 };
 
 // reducer
@@ -116,6 +118,9 @@ export default (state = initialState, action) =>
       case SET_FORM_EMPTY:
         return initialState;
         break;
+      case SET_JOB_INJURY_NOTIFY_TEXT:
+        draft.jobInjuryNotifyText = action.payload;
+        break;
     }
   });
 
@@ -161,11 +166,11 @@ export const setIsLoadingSaveAsDraft = (value = false) => ({
 
 export const setOnPreviewFlag = () => ({
   type: SET_PREVIEW_FLAG,
-  payload: '',
+  payload: "",
 });
 export const setResetOnPreviewFlag = () => ({
   type: RESET_PREVIEW_FLAG,
-  payload: '',
+  payload: "",
 });
 
 export const setFormTemplate = (value = []) => ({
@@ -210,4 +215,9 @@ export const setDispatchFormData = (value) => ({
 
 export const setFormEmpty = () => ({
   type: SET_FORM_EMPTY,
+});
+
+export const setJobInjuryNotifyText = (value) => ({
+  type: SET_JOB_INJURY_NOTIFY_TEXT,
+  payload: value,
 });

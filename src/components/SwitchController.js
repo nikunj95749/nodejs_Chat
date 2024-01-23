@@ -1,16 +1,26 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setDispatchFormData, setFormValidation } from "../../store/form";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { RFValue } from "react-native-responsive-fontsize";
 
-import { RED, responsiveScale } from "../styles";
+import { ORANGE, RED, responsiveScale } from "../styles";
 import { TxtPoppinMedium } from "./text/TxtPoppinMedium";
 import store from "../../store/configureStore";
 import Info from "./Info";
 import { notifyDispatchJobInjury } from "../resources/baseServices/form";
+import { showMessage } from "react-native-flash-message";
 
 const SwitchController = ({ data, formSample = {} }) => {
   const arrData = useMemo(() => {
@@ -18,6 +28,8 @@ const SwitchController = ({ data, formSample = {} }) => {
   }, []);
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(null);
   const [isValidateText, setIsValidateText] = useState(true);
+  const [isJobInjuryPopupVisible, setIsJobInjuryPopupVisible] = useState(false);
+  const [comment,setComment]=useState('');
   // const dispatchFormData = useSelector(
   //   (state) => state.form?.dispatchFormData ?? {},
   // );
@@ -29,6 +41,12 @@ const SwitchController = ({ data, formSample = {} }) => {
 
   const formSampleData = useSelector(
     (state) => state.form?.formSampleData ?? []
+  );
+  const internetAvailable = useSelector(
+    (state) => state.workOrderForOffline?.internetAvailable
+  );
+  const jobInjuryNotifyText = useSelector(
+    (state) => state.form?.jobInjuryNotifyText ?? ""
   );
 
   useEffect(() => {
@@ -223,22 +241,16 @@ const SwitchController = ({ data, formSample = {} }) => {
       dispatch(setDispatchFormData(finalData));
     }
   };
-  const postNotifyDispatchJobInjury = async () => {
+  const postNotifyDispatchJobInjury = async (comment) => {
     try {
       const latestDispatchFormData = store?.getState()?.form?.dispatchFormData;
       const userDetail = store?.getState()?.auth?.userDetails;
       const data = {
         userId: userDetail.id,
         dispatchId: latestDispatchFormData?.form?.dispatchId,
+        comments:comment,
       };
-      console.log(
-        "latestDispatchFormData = ",
-        latestDispatchFormData?.form?.dispatchId,
-        "=== ",
-        userDetail.id
-      );
       const res = notifyDispatchJobInjury(data);
-      console.log("res......................", res);
     } catch (error) {
       console.log("error", error);
     }
@@ -300,22 +312,35 @@ const SwitchController = ({ data, formSample = {} }) => {
               data.id === 200 &&
               event.nativeEvent.selectedSegmentIndex === 0
             ) {
-              Alert.alert("Are you sure?", "", [
-                {
-                  text: "Confirm",
-                  onPress: async () => {
-                    onChange(0);
-                    setSelectedSegmentIndex(0);
-                    postNotifyDispatchJobInjury();
-                  },
-                },
-                {
-                  text: "Cancel",
-                  onPress: () => {
+              if (internetAvailable) {
+                // Alert.alert(jobInjuryNotifyText, "", [
+                //   {
+                //     text: "YES",
+                //     onPress: async () => {
+                //       onChange(0);
+                //       setSelectedSegmentIndex(0);
+                //       postNotifyDispatchJobInjury();
+                //     },
+                //   },
+                //   {
+                //     text: "NO",
+                //     onPress: () => {
+                //       setSelectedSegmentIndex(1);
+                //     },
+                //   },
+                // ]);
+                setIsJobInjuryPopupVisible(true)
+              } else {
+                showMessage({
+                  message: "Internet is require for this action",
+                  type: "danger",
+                  titleStyle: { alignSelf: "center", fontSize: 18 },
+                  duration: 1000,
+                  onHide: () => {
                     setSelectedSegmentIndex(1);
                   },
-                },
-              ]);
+                });
+              }
             } else {
               onChange(event.nativeEvent.selectedSegmentIndex);
               setSelectedSegmentIndex(event.nativeEvent.selectedSegmentIndex);
@@ -323,8 +348,96 @@ const SwitchController = ({ data, formSample = {} }) => {
           }}
         />
       </View>
+      <Modal
+        visible={isJobInjuryPopupVisible}
+        transparent={true}
+
+        style={{ flex: 1,}}
+        animationType="slide"
+      >
+        <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.8)',alignItems:'center',justifyContent:'center'}}>
+        <View
+          style={styles.jobInjuryModel}
+        >
+          <Text style={styles.notifyText}>
+            {jobInjuryNotifyText}
+          </Text>
+          <TextInput
+            placeholder="Enter Description"
+            style={styles.commentInput}
+            value={comment}
+            multiline
+            onChangeText={setComment}
+          ></TextInput>
+          <View
+            style={styles.buttonContainer}
+          >
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                onChange(0);
+                setSelectedSegmentIndex(0);
+                postNotifyDispatchJobInjury(comment);
+                setIsJobInjuryPopupVisible(false);
+              }}
+            >
+              <Text style={styles.buttonText}>
+                Confirm
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                setSelectedSegmentIndex(1);
+                setIsJobInjuryPopupVisible(false);
+              }}
+            >
+              <Text style={styles.buttonText}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 export default SwitchController;
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  jobInjuryModel:{
+    alignItems: "center",
+    paddingVertical:20,
+    backgroundColor: "white",
+    marginHorizontal: 50,
+    borderRadius: 10,
+    borderWidth: 0.4,
+    justifyContent: "center",
+  },
+  notifyText:{ fontSize: 22, fontWeight: "500" },
+  commentInput:{
+    borderColor: "gray",
+    borderRadius: 10,
+    borderWidth: 1,
+    height: 150,
+    width: 650,
+    padding: 15,
+    marginTop: 20,
+    fontSize: 18,
+  },
+  buttonContainer:{
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
+    marginTop: 20,
+  },
+  button:{
+    backgroundColor: ORANGE,
+    height: 70,
+    width: 305,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  buttonText:{ color: "white", fontSize: 25, fontWeight: "700" },
+});
