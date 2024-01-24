@@ -9,6 +9,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setDispatchFormData, setFormValidation } from "../../store/form";
@@ -29,7 +30,8 @@ const SwitchController = ({ data, formSample = {} }) => {
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(null);
   const [isValidateText, setIsValidateText] = useState(true);
   const [isJobInjuryPopupVisible, setIsJobInjuryPopupVisible] = useState(false);
-  const [comment,setComment]=useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [comment, setComment] = useState("");
   // const dispatchFormData = useSelector(
   //   (state) => state.form?.dispatchFormData ?? {},
   // );
@@ -248,11 +250,15 @@ const SwitchController = ({ data, formSample = {} }) => {
       const data = {
         userId: userDetail.id,
         dispatchId: latestDispatchFormData?.form?.dispatchId,
-        comments:comment,
+        comments: comment,
       };
-      const res = notifyDispatchJobInjury(data);
+      setIsLoading(true);
+      const res = await notifyDispatchJobInjury(data);
+      setIsLoading(false);
+      setIsJobInjuryPopupVisible(false);
     } catch (error) {
       console.log("error", error);
+      setIsLoading(false);
     }
   };
 
@@ -313,23 +319,7 @@ const SwitchController = ({ data, formSample = {} }) => {
               event.nativeEvent.selectedSegmentIndex === 0
             ) {
               if (internetAvailable) {
-                // Alert.alert(jobInjuryNotifyText, "", [
-                //   {
-                //     text: "YES",
-                //     onPress: async () => {
-                //       onChange(0);
-                //       setSelectedSegmentIndex(0);
-                //       postNotifyDispatchJobInjury();
-                //     },
-                //   },
-                //   {
-                //     text: "NO",
-                //     onPress: () => {
-                //       setSelectedSegmentIndex(1);
-                //     },
-                //   },
-                // ]);
-                setIsJobInjuryPopupVisible(true)
+                setIsJobInjuryPopupVisible(true);
               } else {
                 showMessage({
                   message: "Internet is require for this action",
@@ -351,53 +341,62 @@ const SwitchController = ({ data, formSample = {} }) => {
       <Modal
         visible={isJobInjuryPopupVisible}
         transparent={true}
-
-        style={{ flex: 1,}}
+        style={{ flex: 1 }}
         animationType="slide"
       >
-        <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.8)',alignItems:'center',justifyContent:'center'}}>
         <View
-          style={styles.jobInjuryModel}
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.8)",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Text style={styles.notifyText}>
-            {jobInjuryNotifyText}
-          </Text>
-          <TextInput
-            placeholder="Enter Description"
-            style={styles.commentInput}
-            value={comment}
-            multiline
-            onChangeText={setComment}
-          ></TextInput>
-          <View
-            style={styles.buttonContainer}
-          >
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                onChange(0);
-                setSelectedSegmentIndex(0);
-                postNotifyDispatchJobInjury(comment);
-                setIsJobInjuryPopupVisible(false);
-              }}
-            >
-              <Text style={styles.buttonText}>
-                Confirm
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                setSelectedSegmentIndex(1);
-                setIsJobInjuryPopupVisible(false);
-              }}
-            >
-              <Text style={styles.buttonText}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.jobInjuryModel}>
+            <Text style={styles.notifyText}>{jobInjuryNotifyText}</Text>
+            <TextInput
+              placeholder="Enter Description"
+              style={styles.commentInput}
+              value={comment}
+              multiline
+              onChangeText={setComment}
+            ></TextInput>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  if (comment != '') {
+                    onChange(0);
+                    setSelectedSegmentIndex(0);
+                    postNotifyDispatchJobInjury(comment);
+                  } else {
+                    showMessage({
+                      message: "Please ensure you provide a description before submitting.",
+                      type: "danger",
+                      titleStyle: { alignSelf: "center", fontSize: 18 },
+                      duration: 1000,
+                    });
+                  }
+                 
+                }}
+              >
+                {isLoading ? (
+                  <ActivityIndicator size={'large'} color={'white'} />
+                ) : (
+                  <Text style={styles.buttonText}>Confirm</Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setSelectedSegmentIndex(1);
+                  setIsJobInjuryPopupVisible(false);
+                }}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
         </View>
       </Modal>
     </View>
@@ -405,17 +404,17 @@ const SwitchController = ({ data, formSample = {} }) => {
 };
 export default SwitchController;
 const styles = StyleSheet.create({
-  jobInjuryModel:{
+  jobInjuryModel: {
     alignItems: "center",
-    paddingVertical:20,
+    paddingVertical: 20,
     backgroundColor: "white",
     marginHorizontal: 50,
     borderRadius: 10,
     borderWidth: 0.4,
     justifyContent: "center",
   },
-  notifyText:{ fontSize: 22, fontWeight: "500" },
-  commentInput:{
+  notifyText: { fontSize: 22, fontWeight: "500" },
+  commentInput: {
     borderColor: "gray",
     borderRadius: 10,
     borderWidth: 1,
@@ -425,13 +424,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 18,
   },
-  buttonContainer:{
+  buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: "100%",
     marginTop: 20,
   },
-  button:{
+  button: {
     backgroundColor: ORANGE,
     height: 70,
     width: 305,
@@ -439,5 +438,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
   },
-  buttonText:{ color: "white", fontSize: 25, fontWeight: "700" },
+  buttonText: { color: "white", fontSize: 25, fontWeight: "700" },
 });
