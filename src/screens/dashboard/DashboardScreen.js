@@ -219,7 +219,6 @@ const DashboardScreen = ({ navigation, route }) => {
     (state) => state.workOrderForOffline?.pendingworkOrderListForOffline ?? []
   );
 
-
   useEffect(() => {
     const appStateChangeHandler = (nextAppState) => {
       if (nextAppState === 'background') {
@@ -243,19 +242,30 @@ const DashboardScreen = ({ navigation, route }) => {
     };
   }, [appStates]);
 
+
+  const checkIsFutureDate = (targetTime) => {
+    const targetDate = moment(targetTime);
+    const currentDate = moment();
+    if (currentDate < targetDate) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   useEffect(() => {
     const LateAndLockedWO = pendingworkOrderListForOffline
       ?.filter((obj) => !obj?.data?.shouldMoveToCompleted)
-      ?.filter(
-        (item) =>
-          (dateDifference(item.data.pendingData.JobDate) > 24 &&
-            dateDifference(item.data.pendingData.JobDate) <= 36) ||
-          (dateDifference(item.data.pendingData.JobDate) > 36 &&
-            !item.data.pendingData.IsUnlocked)
-      );
-    if (LateAndLockedWO?.length > 0) {
+      ?.filter((item) => {
+        const IsLocked =
+          dateDifference(item.data.pendingData?.JobDate) > 36 &&
+          !item.data?.pendingData?.IsUnlocked;
+        const isFutureDate = checkIsFutureDate(item.data.pendingData?.JobDate);
+        return (IsLocked && !isFutureDate);
+      });
+    
       dispatch(setLateAndLockWO(LateAndLockedWO?.length ?? 0));
-    }
+    
   }, [pendingworkOrderListForOffline]);
 
   const pendingworkOrderList = useSelector(
