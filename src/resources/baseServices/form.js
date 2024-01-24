@@ -82,3 +82,6 @@ export const notifyDispatchJobInjury = (data = {}) =>
     url: API.NOTIFY_DISPATCH_JOB_INJURY,
     data,
   });
+
+export const getWOJobInjuryNotifyText = () =>
+  callApiGet({ url: API.WO_JOB_INJURY_NOTIFY_TEXT });

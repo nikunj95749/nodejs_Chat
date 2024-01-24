@@ -76,6 +76,7 @@ const API = {
 
 
   NOTIFY_DISPATCH_JOB_INJURY : BASE_URL + '/DispatchForm/notifyDispatchJobInjury',
+  WO_JOB_INJURY_NOTIFY_TEXT : BASE_URL + '/lookups/getListByType?type=WOJobInjuryNotifyText',
 
 };
 

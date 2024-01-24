@@ -20,6 +20,7 @@ import {
   Text,
   RefreshControl,
   AppState,
+  NativeModules,
 } from "react-native";
 import Geolocation, {
   getCurrentPosition,
@@ -189,6 +190,8 @@ const DashboardScreen = ({ navigation, route }) => {
   const [isFolderLoading, setIsFolderLoading] = useState(false);
   const [isAvailableInRange, setIsAvailableInRange] = useState(false);
   const [isLoadingRefresh, setIsLoadingRefresh] = useState(false);
+  const [appStates, setAppStates] = useState(AppState.currentState);
+  const [restartTimeout, setRestartTimeout] = useState(null);
   const { width, height } = useWindowDimensions();
   const refRBSheetForAppUpdate = useRef();
   const { loading, result } = useDeviceName();
@@ -216,6 +219,30 @@ const DashboardScreen = ({ navigation, route }) => {
     (state) => state.workOrderForOffline?.pendingworkOrderListForOffline ?? []
   );
 
+  useEffect(() => {
+    const appStateChangeHandler = (nextAppState) => {
+      if (nextAppState === 'background') {
+        const restartTimeout = setTimeout(() => {
+          NativeModules.DevSettings.reload();
+        },7 * 24 * 60 * 60 * 1000 );
+
+        setRestartTimeout(restartTimeout);
+      }
+
+      setAppStates(nextAppState);
+    };
+
+    AppState.addEventListener('change', appStateChangeHandler);
+
+    return () => {
+      AppState.removeEventListener('change', appStateChangeHandler);
+      if (restartTimeout) {
+        clearTimeout(restartTimeout);
+      }
+    };
+  }, [appStates]);
+
+
   const checkIsFutureDate = (targetTime) => {
     const targetDate = moment(targetTime);
     const currentDate = moment();
@@ -225,6 +252,7 @@ const DashboardScreen = ({ navigation, route }) => {
       return false;
     }
   };
+
   useEffect(() => {
     const LateAndLockedWO = pendingworkOrderListForOffline
       ?.filter((obj) => !obj?.data?.shouldMoveToCompleted)
