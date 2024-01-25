@@ -19,9 +19,7 @@ xcuserdata
 DerivedData
 *.hmap
 *.ipa
-*.hprof
 *.xcuserstate
-project.xcworkspace
 
 # Android/IntelliJ
 #
@@ -40,6 +38,8 @@ yarn-error.log
 # BUCK
 buck-out/
 \.buckd/
+*.keystore
+!debug.keystore
 
 # fastlane
 #
@@ -54,17 +54,6 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
-.env
-env/
-.env.template
-.env.development.template
 
-# Ruby / CocoaPods
+# CocoaPods
 /ios/Pods/
-/vendor/bundle/
-package-lock.json
-yarn.lock
-Podfile.lock
-
-# Visual Studio Code Workspace setting
-.vscode/settings.json

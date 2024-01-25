@@ -18,6 +18,7 @@ import {
   getAllReportTemplate,
   getCopyPriorFormFieldData,
   getDispatchFormData,
+  getWOJobInjuryNotifyText,
   insertOrUpdateFormAPI,
 } from '../../resources/baseServices/form';
 import {
@@ -29,6 +30,7 @@ import {
   setIsLoadingPreview,
   setIsLoadingReview,
   setIsLoadingSaveAsDraft,
+  setJobInjuryNotifyText,
 } from '../../../store/form';
 import TopBar from '../../components/TopBar';
 import store from '../../../store/configureStore';
@@ -72,7 +74,7 @@ const MasterForm = ({navigation, route}) => {
   const NS = 'NSHours';
   const NSOT = 'NSOTHours';
   const NSDT = 'NSDTHours';
-  
+
   let startTimeValue = '';
   let endTimeValue = '';
   let lunchTimeValue = '';
@@ -268,9 +270,9 @@ const MasterForm = ({navigation, route}) => {
 
       dispatch(setDispatchFormData(updatedFormData));
       showMessage({
-        message: "Success!",
-        description: "Order Saved Successfully!",
-        type: "success",
+        message: 'Success!',
+        description: 'Order Saved Successfully!',
+        type: 'success',
       });
       // await sleep(500);
       // await getDispatchFormDataAPI(false);
@@ -795,7 +797,6 @@ const MasterForm = ({navigation, route}) => {
           (obj) => obj?.formFieldId === data?.formField?.id,
         );
 
-
         if (data?.formField?.name == startTime) {
           startTimeValue = fieldData?.textValue;
         } else if (data?.formField?.name == endTime) {
@@ -843,7 +844,6 @@ const MasterForm = ({navigation, route}) => {
 
         if (filteredAllReportTemplate?.length > 0) {
           filteredAllReportTemplate = filteredAllReportTemplate?.map((obj) => {
-            
             return {
               ...obj,
               templateHtmlText: replaceAll(
@@ -1510,7 +1510,7 @@ const MasterForm = ({navigation, route}) => {
         );
         if (data?.formField?.name == lunchTime) {
           lunchTimeValue = fieldData?.textValue;
-        } else if (data?.formField?.name== ST) {
+        } else if (data?.formField?.name == ST) {
           STValue = fieldData?.textValue;
         } else if (data?.formField?.name == OT) {
           OTValue = fieldData?.textValue;
@@ -1550,7 +1550,7 @@ const MasterForm = ({navigation, route}) => {
 
         if (data?.formField?.name == lunchTime) {
           lunchTimeValue = fieldData?.textValue;
-        } else if (data?.formField?.name== ST) {
+        } else if (data?.formField?.name == ST) {
           STValue = fieldData?.textValue;
         } else if (data?.formField?.name == OT) {
           OTValue = fieldData?.textValue;
@@ -1749,7 +1749,22 @@ const MasterForm = ({navigation, route}) => {
       ),
     );
     setCopyPriorFormFieldData();
+    getWOJobInjuryNotify();
   }, []);
+
+  const getWOJobInjuryNotify = async () => {
+    try {
+      const res = await getWOJobInjuryNotifyText();
+      const value =
+        res?.data?.find((obj) => obj?.type == 'WOJobInjuryNotifyText')?.title ??
+        '';
+      if (value) {
+        dispatch(setJobInjuryNotifyText(value));
+      }
+    } catch (error) {
+      console.log('setCopyPriorFormFieldData error: ', error);
+    }
+  };
 
   const setCopyPriorFormFieldData = async () => {
     try {
@@ -1974,7 +1989,7 @@ const MasterForm = ({navigation, route}) => {
         item: route?.params?.item,
         folderName: finalFormTemplateData?.[0]?.form?.title ?? '',
         arrFormBuffers,
-        formDetails:{
+        formDetails: {
           startTimeValue,
           endTimeValue,
           lunchTimeValue,
@@ -1984,7 +1999,7 @@ const MasterForm = ({navigation, route}) => {
           NSValue,
           NSOTValue,
           NSDTValue,
-        }
+        },
       });
       filteredAllReportTemplate = [];
       mapAllReportTemplete(allReportTemplate);
