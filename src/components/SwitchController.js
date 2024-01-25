@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {setDispatchFormData, setFormValidation} from '../../store/form';
+import {setDispatchFormData, setFormValidation, setJobInjuryNotifyText} from '../../store/form';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import {RFValue} from 'react-native-responsive-fontsize';
 
@@ -20,7 +20,10 @@ import {ORANGE, RED, responsiveScale} from '../styles';
 import {TxtPoppinMedium} from './text/TxtPoppinMedium';
 import store from '../../store/configureStore';
 import Info from './Info';
-import {notifyDispatchJobInjury} from '../resources/baseServices/form';
+import {
+  getWOJobInjuryNotifyText,
+  notifyDispatchJobInjury,
+} from '../resources/baseServices/form';
 import {showMessage} from 'react-native-flash-message';
 
 const SwitchController = ({data, formSample = {}}) => {
@@ -310,7 +313,7 @@ const SwitchController = ({data, formSample = {}}) => {
             borderColor: isValidateText ? 'rgba(0,0,0,0)' : RED,
             alignSelf: 'flex-end',
           }}
-          onChange={(event) => {
+          onChange={async (event) => {
             setSelectedSegmentIndex(event.nativeEvent.selectedSegmentIndex);
             if (
               data.id === 200 &&
@@ -318,6 +321,18 @@ const SwitchController = ({data, formSample = {}}) => {
             ) {
               if (internetAvailable) {
                 setIsJobInjuryPopupVisible(true);
+                try {
+                  const res = await getWOJobInjuryNotifyText();
+                  const value =
+                    res?.data?.find(
+                      (obj) => obj?.type == 'WOJobInjuryNotifyText',
+                    )?.title ?? '';
+                  if (value) {
+                    dispatch(setJobInjuryNotifyText(value));
+                  }
+                } catch (error) {
+                  console.log('setCopyPriorFormFieldData error: ', error);
+                }
               } else {
                 showMessage({
                   message: 'Internet is require for this action',
