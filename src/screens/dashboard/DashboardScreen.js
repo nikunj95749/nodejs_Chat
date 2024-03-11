@@ -258,9 +258,9 @@ const DashboardScreen = ({ navigation, route }) => {
       ?.filter((obj) => !obj?.data?.shouldMoveToCompleted)
       ?.filter((item) => {
         const IsLocked =
-          dateDifference(item.data.pendingData?.JobDate) > 36 &&
+          dateDifference(item.data.pendingData?.LockStartTime) > 36 &&
           !item.data?.pendingData?.IsUnlocked;
-        const isFutureDate = checkIsFutureDate(item.data.pendingData?.JobDate);
+        const isFutureDate = checkIsFutureDate(item.data.pendingData?.LockStartTime);
         return (IsLocked && !isFutureDate);
       });
     

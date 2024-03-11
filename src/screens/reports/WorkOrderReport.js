@@ -227,7 +227,7 @@ const WorkOrderReport = ({navigation}) => {
             }
             return item?.SubStatus === 'Completed' ||
               item?.SubStatus === 'Reviewed' ? null : dateDifference(
-                pendingItem.JobDate,
+                pendingItem.LockStartTime,
               ) > 36 && !pendingItem.IsUnlocked ? null : (
               <PendingWorkItemSwipeView item={item} navigation={navigation}/>
             );

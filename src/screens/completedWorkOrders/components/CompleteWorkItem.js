@@ -41,7 +41,7 @@ export const CompleteWorkItem = ({item = {}, onPress = () => {}}) => {
   const [isLoadingEmailData, setIsLoadingEmailData] = useState(false);
 
   const weekDay = useMemo(() => {
-    var d = moment(item?.JobDate).format('YYYY-MM-DD');
+    var d = moment(item?.LockStartTime).format('YYYY-MM-DD');
     const dayOfWeek = new Date(d).getDay();
     var dayName = weekDays[dayOfWeek];
     return dayName;

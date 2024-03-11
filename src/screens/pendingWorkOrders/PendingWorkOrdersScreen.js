@@ -146,14 +146,14 @@ const PendingWorkOrdersScreen = ({ navigation, route }) => {
           renderItem={({ item, index }) => (
             <SwipeRow
               disableLeftSwipe={
-                dateDifference(item?.data?.pendingData.JobDate) > 36 &&
+                dateDifference(item?.data?.pendingData.LockStartTime) > 36 &&
                 !item?.data?.pendingData.IsUnlocked &&
-                !checkIsFutureDate(item?.data?.pendingData.JobDate)
+                !checkIsFutureDate(item?.data?.pendingData.LockStartTime)
               }
               disableRightSwipe={
-                dateDifference(item?.data?.pendingData.JobDate) > 36 &&
+                dateDifference(item?.data?.pendingData.LockStartTime) > 36 &&
                 !item?.data?.pendingData.IsUnlocked &&
-                !checkIsFutureDate(item?.data?.pendingData.JobDate)
+                !checkIsFutureDate(item?.data?.pendingData.LockStartTime)
               }
               rightOpenValue={-330}
               leftOpenValue={190}

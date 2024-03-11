@@ -158,14 +158,14 @@ export const PendingWorkItem = ({
   };
 
   const weekDay = useMemo(() => {
-    const d = moment(item?.JobDate).format("YYYY-MM-DD");
+    const d = moment(item?.LockStartTime).format("YYYY-MM-DD");
     const dayOfWeek = new Date(d).getDay();
     const dayName = weekDays[dayOfWeek];
     return dayName;
   }, []);
 
-  const IsLocked = dateDifference(item?.JobDate) > 36 && !item.IsUnlocked;
-  const isFutureDate = checkIsFutureDate(item?.JobDate);
+  const IsLocked = dateDifference(item?.LockStartTime) > 36 && !item.IsUnlocked;
+  const isFutureDate = checkIsFutureDate(item?.LockStartTime);
 
   return (
     <View
@@ -283,7 +283,7 @@ export const PendingWorkItem = ({
             <View style={styles.BottomTextContainer}>
               {isFutureDate
                 ? null
-                : dateDifference(item?.JobDate) > 36 && (
+                : dateDifference(item?.LockStartTime) > 36 && (
                     <>
                       {!IsLocked ? (
                         <View style={styles.imageContainer}>
@@ -301,16 +301,16 @@ export const PendingWorkItem = ({
                 title={
                   isFutureDate
                     ? null
-                    : dateDifference(item?.JobDate) <= 24
+                    : dateDifference(item?.LockStartTime) <= 24
                     ? `WO late after ${
-                        24 - Math.trunc(dateDifference(item?.JobDate))
+                        24 - Math.trunc(dateDifference(item?.LockStartTime))
                       } hours`
-                    : dateDifference(item?.JobDate) > 24 &&
-                      dateDifference(item?.JobDate) <= 36
+                    : dateDifference(item?.LockStartTime) > 24 &&
+                      dateDifference(item?.LockStartTime) <= 36
                     ? `WO lock after ${
-                        36 - Math.trunc(dateDifference(item?.JobDate))
+                        36 - Math.trunc(dateDifference(item?.LockStartTime))
                       } hours`
-                    : dateDifference(item?.JobDate) > 36
+                    : dateDifference(item?.LockStartTime) > 36
                     ? item.IsUnlocked
                       ? "WO Unlocked"
                       : "WO Locked"
