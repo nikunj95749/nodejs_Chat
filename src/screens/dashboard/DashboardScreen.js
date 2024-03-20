@@ -74,6 +74,7 @@ import {
 import { getWorkOrdersAPI } from "../../resources/baseServices/timeSheet";
 import {
   getAllFormSampleData,
+  getAllFormTemplateAssets,
   getAllReportTemplate,
   getCommonCollectionAPI,
   getDispatchFormData,
@@ -85,6 +86,7 @@ import {
   updateDispatchStatusAPI,
 } from "../../resources/baseServices/form";
 import {
+  setAllFormTemplatesAssets,
   setAllReportTemplate,
   setCommonCollection,
   setFormSampleData,
@@ -219,6 +221,10 @@ const DashboardScreen = ({ navigation, route }) => {
     (state) => state.workOrderForOffline?.pendingworkOrderListForOffline ?? []
   );
 
+  useEffect(()=>{
+    getAllWoData();
+  },[])
+
   useEffect(() => {
     const appStateChangeHandler = (nextAppState) => {
       if (nextAppState === 'background') {
@@ -271,6 +277,14 @@ const DashboardScreen = ({ navigation, route }) => {
   const pendingworkOrderList = useSelector(
     (state) => state.workOrder?.pendingworkOrderList ?? []
   );
+  const getAllWoData=async()=>{
+    try {
+      const res= await getAllFormTemplateAssets() 
+      dispatch( setAllFormTemplatesAssets(res));
+    } catch (error) {
+      console.log('error...........',error);
+    }
+  }
 
   const dispatch = useDispatch();
   const getWorkOrdersCount = async () => {

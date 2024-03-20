@@ -20,6 +20,7 @@ const SET_SYNCH_OFFFLINE_LOADER = "SET_SYNCH_OFFFLINE_LOADER";
 const SET_FORM_EMPTY = "SET_FORM_EMPTY";
 const SET_SELECTED_FORM_ITEM = "SET_SELECTED_FORM_ITEM";
 const SET_JOB_INJURY_NOTIFY_TEXT = "SET_JOB_INJURY_NOTIFY_TEXT";
+const SET_ALL_FORM_TEMPLATES_ASSETS="SET_ALL_FORM_TEMPLATES_ASSETS";
 
 const initialState = {
   formTemplate: [],
@@ -47,6 +48,7 @@ const initialState = {
   arrSummary: {},
   isShowSyncOfflineLoader: false,
   jobInjuryNotifyText: "",
+  allFormTemplatesAssets: [],
 };
 
 // reducer
@@ -120,6 +122,9 @@ export default (state = initialState, action) =>
         break;
       case SET_JOB_INJURY_NOTIFY_TEXT:
         draft.jobInjuryNotifyText = action.payload;
+        break;
+      case SET_ALL_FORM_TEMPLATES_ASSETS:
+        draft.allFormTemplatesAssets = action.payload;
         break;
     }
   });
@@ -221,3 +226,8 @@ export const setJobInjuryNotifyText = (value) => ({
   type: SET_JOB_INJURY_NOTIFY_TEXT,
   payload: value,
 });
+
+export const setAllFormTemplatesAssets=(value = [])=>({
+  type: SET_ALL_FORM_TEMPLATES_ASSETS,
+  payload: value,
+})

@@ -97,6 +97,15 @@ const MasterForm = ({navigation, route}) => {
   const allReportTemplete = useSelector(
     (state) => state.form?.allReportTemplete ?? [],
   );
+  const allFormTemplatesAssets= useSelector(
+    (state)=> state.form?.allFormTemplatesAssets??[],
+  );
+  console.log('allFormTemplatesAssets........',allFormTemplatesAssets.data);
+  const pendingworkOrderList = useSelector(
+    (state) => state.workOrder?.pendingworkOrderList ?? []
+  );
+  console.log('pendingworkOrderList.......',pendingworkOrderList);
+  // console.log('allFormTemplatesAssets............',allFormTemplatesAssets.data[2]);
 
   const userDetails = useSelector((state) => state.auth?.userDetails ?? '');
   let htmlData = '';
@@ -114,6 +123,7 @@ const MasterForm = ({navigation, route}) => {
   const mapAllReportTemplete = (data) => {
     const pageHeader = data?.find((item) => item?.name === 'PageHeader');
     const pageFooter = data?.find((item) => item?.name === 'PageFooter');
+    console.log('pageFooter..........',pageFooter);
 
     let arrFilteredReportTemp = data
       ?.filter(
@@ -1751,6 +1761,7 @@ const MasterForm = ({navigation, route}) => {
     setCopyPriorFormFieldData();
     getWOJobInjuryNotify();
   }, []);
+  console.log('finalFormTemplateData........',finalFormTemplateData);
 
   const getWOJobInjuryNotify = async () => {
     try {
@@ -1823,9 +1834,12 @@ const MasterForm = ({navigation, route}) => {
       }
 
       htmlData = data;
+      console.log('htmlData.........',htmlData);
 
       const woItem = route?.params?.item;
-
+      const DataBase64=allFormTemplatesAssets.data.find((item)=>item.companyId === woItem.CompanyId && item.name === 'LogoBase64');
+      const DataFooter=allFormTemplatesAssets.data.find((item)=>item.companyId === woItem.CompanyId && item.name === 'PageFooter');
+      console.log('DataFooter......',DataFooter);
       showTemplateHtmlDataForMultipleCheckList();
       showTemplateHtmlData();
 
@@ -1857,9 +1871,11 @@ const MasterForm = ({navigation, route}) => {
           const additionalSummaryPage = filteredAllReportTemplate?.find(
             (item) => item?.name === 'AdditionalSummaryPage',
           );
+          console.log('additionalSummaryPage.........',additionalSummaryPage);
           let htmlReportTemplate = `${additionalSummaryPage?.templateHtmlText}${
             additionalSummaryPage?.templatePhoto ?? ''
           }`;
+          console.log('htmlReportTemplate.............',htmlReportTemplate);
           Object.entries(woItem).map(([key, value]) => {
             htmlReportTemplate = replaceAll(
               htmlReportTemplate,
@@ -1867,11 +1883,11 @@ const MasterForm = ({navigation, route}) => {
               value,
             );
           });
-
+          
           htmlReportTemplate = replaceAll(
             htmlReportTemplate,
             `{{LogoBase64}}`,
-            `${finalFormTemplateData?.[0]?.form?.logoBase64}`,
+            `${DataBase64.length > 0?DataBase64.data:finalFormTemplateData?.[0]?.form?.logoBase64}`,
           );
 
           htmlReportTemplate = replaceAll(
@@ -1896,6 +1912,7 @@ const MasterForm = ({navigation, route}) => {
             let htmlReportTemplate = `${element?.templateHtmlText}${
               element?.templatePhoto ?? ''
             }`;
+            console.log('htmlReportTemplate............',htmlReportTemplate);
             Object.entries(woItem).map(([key, value]) => {
               htmlReportTemplate = replaceAll(
                 htmlReportTemplate,
@@ -1907,7 +1924,7 @@ const MasterForm = ({navigation, route}) => {
             htmlReportTemplate = replaceAll(
               htmlReportTemplate,
               `{{LogoBase64}}`,
-              `${finalFormTemplateData?.[0]?.form?.logoBase64}`,
+              `${DataBase64.data}`,
             );
 
             arrFormBuffers.push({
@@ -1928,6 +1945,7 @@ const MasterForm = ({navigation, route}) => {
           let htmlReportTemplate = `${element?.templateHtmlText}${
             element?.templatePhoto ?? ''
           }`;
+          console.log('htmlReportTemplate...............',htmlReportTemplate);
           Object.entries(woItem).map(([key, value]) => {
             htmlReportTemplate = replaceAll(
               htmlReportTemplate,
@@ -1939,7 +1957,7 @@ const MasterForm = ({navigation, route}) => {
           htmlReportTemplate = replaceAll(
             htmlReportTemplate,
             `{{LogoBase64}}`,
-            `${finalFormTemplateData?.[0]?.form?.logoBase64}`,
+            `${DataBase64.data}`,
           );
           const findTamplete = formSampleData?.find((obj) => {
             return obj?.formSample?.id === element?.sample?.formSampleId;
@@ -1962,7 +1980,7 @@ const MasterForm = ({navigation, route}) => {
       htmlData = replaceAll(
         htmlData,
         `{{LogoBase64}}`,
-        `${finalFormTemplateData?.[0]?.form?.logoBase64}`,
+        `${DataBase64?.data}`,
       );
       showTemplateHtmlData(true);
 

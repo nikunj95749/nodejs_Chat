@@ -85,3 +85,6 @@ export const notifyDispatchJobInjury = (data = {}) =>
 
 export const getWOJobInjuryNotifyText = () =>
   callApiGet({ url: API.WO_JOB_INJURY_NOTIFY_TEXT });
+
+export const getAllFormTemplateAssets=()=>
+  callApiGet({url:API.GET_ALL_FORM_TEMPLATE_ASSETS});
